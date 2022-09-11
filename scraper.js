@@ -9,7 +9,7 @@ const URL = "https://www.quill.com/hanging-file-folders/cbk/122567.html";
 const writeStream = fs.createWriteStream("data.csv");
 
 writeStream.write(
-  `Product-Price,Product-Model,Product-Number,Product-Category,Product-Name`
+  `Product-Price,Product-Model,Product-Number,Product-Category,Product-Name,Product-Descriptions`
 );
 
 request(URL, async (err, res, html) => {
@@ -31,10 +31,13 @@ request(URL, async (err, res, html) => {
     
 	const product_category = $(html).find(".ML_s").text().replace(/>/g, " > ");
     
+	const product_description = $(ele).find(".skuBrowseBullets").children('.skuBrowseBullet').text().trim()
+	console.log(`${product_description}\n`);
+
 	writeStream.write(
-      `${product_price},${product_model},${product_number},${product_category},${product_name} \n`
+      `${product_price},${product_model},${product_number},${product_category},${product_name},${product_description} \n`
     );
-	
+
   });
 
   console.log("Done!");
